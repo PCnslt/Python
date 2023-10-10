@@ -7,11 +7,14 @@ import optparse
 
 def get_arguments():
     parser = optparse.OptionParser()
-    parser.add_option("-t","--target", dest="target",help="Exact/Range of target IP addresses. Do 'arp -a' and 'route n' on target PC. Port forward by doing 'echo 1 < /proc/sys/net/ipv4/ip_forward'")
+    parser.add_option("-t","--target", dest="target",help="Target IP address. Do 'arp -a' and 'route PRINT' on target PC. Port forward by doing 'echo 1 < /proc/sys/net/ipv4/ip_forward'")
+    parser.add_option("-g","--gateway", dest="gateway",help="Gateway IP address.(Router) Do 'arp -a' and 'route PRINT' on target PC. Port forward by doing 'echo 1 < /proc/sys/net/ipv4/ip_forward'")
     
     (options,arguments) = parser.parse_args()
     if not options.target:
-        parser.error("Please provide target IP address(/range(eg. 1/24)).")
+        parser.error("\n[-] Please provide target IP address.\n")
+    elif not options.gateway:
+        parser.error("\nPlease Router gateway IP address.\n")
     return options
 
 
@@ -40,8 +43,8 @@ def restore(destination_ip, source_ip):
     scapy.send(packet, count=4, verbose=False)
     
 
-target_ip = "192.168.235.135"
-gateway_ip = "192.168.235.2"
+target_ip = get_arguments().target
+gateway_ip = get_arguments().gateway
 
 try:
     sent_packets_count = 0
