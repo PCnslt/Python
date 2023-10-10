@@ -32,8 +32,8 @@ def get_login_info(packet):
 
 def process_sniffed_packet(packet):
     if packet.haslayer(http.HTTPRequest):
-        url = get_url
-        print("[+] HTTP Request >> " + url)
+        url = get_url(packet)
+        print("[+] HTTP Request >> " + str(url))
         
         login_info = get_login_info(packet)
         if login_info:
